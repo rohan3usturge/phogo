@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "463598336072",
+    "firebase_url": "https://phogo-b378f.firebaseio.com",
+    "project_id": "phogo-b378f",
+    "storage_bucket": "phogo-b378f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:463598336072:android:6046b924ab8d61ae",
+        "android_client_info": {
+          "package_name": "com.rsu.phogo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "463598336072-a2l2pccl8q2v8kv0lv6i1bjiet3e3ph6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDuyMfCZasLev_VD-R1wnCMcqekkii9Wi0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "463598336072-a2l2pccl8q2v8kv0lv6i1bjiet3e3ph6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

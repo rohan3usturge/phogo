@@ -1,4 +1,4 @@
-package com.example.phogo;
+package com.rsu.phogo;
 
 import android.os.Bundle;
 import io.flutter.app.FlutterActivity;

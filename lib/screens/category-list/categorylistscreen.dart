@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:phogo/models/imagecategory.dart';
 import 'package:phogo/screens/category-list/components/body.dart';
@@ -35,7 +37,7 @@ class CategoryList extends State<CategoryListScreen> {
         shrinkWrap: true,
         padding: EdgeInsets.all(0),
         children: <Widget>[
-          ImageCountChart(),
+          ImageCountChart(categories: imageCategories,),
           Body(imageCategories: imageCategories)
         ],
       ),
@@ -60,21 +62,21 @@ class CategoryList extends State<CategoryListScreen> {
             appBar: AppBar(
               title: Text('Manage'),
             ),
-            body: ListView(
-              children: <Widget>[
-                IconButton(
-                  icon: Icon(Icons.settings),
-                  onPressed: () {},
-                ),
-                FlatButton(
-                  onPressed: () {},
-                  child: Text("Scan Photos"),
-                ),
-                IconButton(
-                  icon: Icon(Icons.settings),
-                  onPressed: () {},
-                ),
-              ],
+            body: FutureBuilder<List<String>>(
+              future: getImageFiles(),
+              builder: (context, snapshot){
+                if ( snapshot.hasData ) {
+                  var data = snapshot.data;
+                  return ListView.builder(
+                    itemCount: snapshot.data.length,
+                    itemBuilder: (context, i){
+                      return ListTile(title: Image.file(File(data[i])),);
+                    }, 
+                  );
+                } else {
+                  return Text("Error Occurred");
+                }
+              },
             ),
           );
         },

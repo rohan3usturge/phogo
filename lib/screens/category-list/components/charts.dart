@@ -1,39 +1,57 @@
 import 'package:charts_flutter/flutter.dart';
 import 'package:flutter/widgets.dart';
+import 'package:phogo/models/imagecategory.dart';
 
 @override
 class ImageCountChart extends StatelessWidget {
+  Future<List<ImageCategory>> categories;
+
+  ImageCountChart({this.categories});
+
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: PieChart(_createSampleData(), animate: true),
+      child: FutureBuilder(
+        future: categories,
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return PieChart(_createSampleData(snapshot.data),
+                animate: true,
+                behaviors: [
+                  new DatumLegend(
+                    position: BehaviorPosition.end,
+                    horizontalFirst: false,
+                    cellPadding: new EdgeInsets.only(right: 4.0, bottom: 4.0),
+                    showMeasures: true,
+                    legendDefaultMeasure: LegendDefaultMeasure.firstValue,
+                    measureFormatter: (num value) {
+                      return value == null ? '-' : '${value}';
+                    },
+                  ),
+                ],
+                defaultRenderer:
+                    new ArcRendererConfig(arcWidth: 30));
+          } else {
+            return Text("Error Occurred ${snapshot.error}");
+          }
+        },
+      ),
       height: 200,
     );
   }
 
   /// Create one series with sample hard coded data.
-  static List<Series<LinearSales, int>> _createSampleData() {
-    final data = [
-      new LinearSales(0, 100),
-      new LinearSales(1, 75),
-      new LinearSales(2, 25),
-      new LinearSales(3, 5),
-    ];
-
+  List<Series<ImageCategory, String>> _createSampleData(
+      List<ImageCategory> categories) {
     return [
-      new Series<LinearSales, int>(
-        id: 'Sales',
-        domainFn: (LinearSales sales, i) => sales.year,
-        measureFn: (LinearSales sales, i) => sales.sales,
-        data: data,
+      new Series<ImageCategory, String>(
+        id: 'Categories',
+        domainFn: (ImageCategory category, i) => category.title,
+        displayName: "Categories",
+        labelAccessorFn: (ImageCategory category, i) => "${category.title}",
+        measureFn: (ImageCategory category, i) => category.images.length,
+        data: categories,
       )
     ];
   }
-}
-
-class LinearSales {
-  final int year;
-  final int sales;
-
-  LinearSales(this.year, this.sales);
 }
