@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:phogo/models/imagecategory.dart';
 import 'package:phogo/screens/category-list/components/body.dart';
+import 'package:phogo/screens/category-list/components/charts.dart';
 import 'package:phogo/screens/image-search/imagesarch.dart';
 import 'package:phogo/services/imageapi.dart';
 
@@ -30,11 +31,18 @@ class CategoryList extends State<CategoryListScreen> {
           IconButton(icon: Icon(Icons.list), onPressed: _pushSaved),
         ],
       ),
-      body: Body(imageCategories: imageCategories),
+      body: ListView(
+        shrinkWrap: true,
+        padding: EdgeInsets.all(0),
+        children: <Widget>[
+          ImageCountChart(),
+          Body(imageCategories: imageCategories)
+        ],
+      ),
     );
   }
 
-  void _openSearch(){
+  void _openSearch() {
     Navigator.of(context).push(
       MaterialPageRoute<void>(
         builder: (BuildContext context) {

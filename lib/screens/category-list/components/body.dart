@@ -17,6 +17,12 @@ class Body extends StatelessWidget {
           if (snapshot.hasData) {
             var categories = snapshot.data;
             return GridView.count(
+              shrinkWrap : true,
+              crossAxisCount: 2,
+              childAspectRatio: 1.0,
+              padding: const EdgeInsets.all(4.0),
+              mainAxisSpacing: 1.0,
+              crossAxisSpacing: 1.0,
               children: categories.map((ImageCategory category) {
                 return new Card(
                     semanticContainer: true,
@@ -74,7 +80,6 @@ class Body extends StatelessWidget {
                       ),
                     ));
               }).toList(),
-              crossAxisCount: 2,
             );
           } else if (snapshot.hasError) {
             return Text("${snapshot.error}");

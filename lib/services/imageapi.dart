@@ -37,37 +37,37 @@ Future<List<ImageCategory>> getImages() async {
     if (isFamily) {
       tags = <String>["family"];
       familyCategory.images.add(new ImageBin(
-          url: "https://picsum.photos/40/40?random=${i}", tags: tags));
+          url: "https://loremflickr.com/400/400/family/all?random=${i}", tags: tags));
     }
 
     if (isNsfw) {
       tags = <String>["nsfw"];
       nsfwCategory.images.add(new ImageBin(
-          url: "https://picsum.photos/40/40?random=${i}", tags: tags));
+          url: "https://loremflickr.com/400/400/blurred/all?random=${i}", tags: tags));
     }
 
     if (isMeme) {
       tags = <String>["meme"];
       memeCategory.images.add(new ImageBin(
-          url: "https://picsum.photos/40/40?random=${i}", tags: tags));
+          url: "https://loremflickr.com/400/400/meme/all?random=${i}", tags: tags));
     }
 
     if (isSelfie) {
       tags = <String>["selfie"];
       selfieCategory.images.add(new ImageBin(
-          url: "https://picsum.photos/40/40?random=${i}", tags: tags));
+          url: "https://loremflickr.com/400/400/selfie/all?random=${i}", tags: tags));
     }
 
     if (isParty) {
       tags = <String>["party"];
       partyCategory.images.add(new ImageBin(
-          url: "https://picsum.photos/40/40?random=${i}", tags: tags));
+          url: "https://loremflickr.com/400/400/party/all?random=${i}", tags: tags));
     }
 
     if (isOffice) {
       tags = <String>["office"];
       officeCategory.images.add(new ImageBin(
-          url: "https://picsum.photos/40/40?random=${i}", tags: tags));
+          url: "https://loremflickr.com/400/400/office/all?random=${i}", tags: tags));
     }
   }
 
