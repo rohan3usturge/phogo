@@ -20,9 +20,9 @@ class Body extends StatelessWidget {
               shrinkWrap: true,
               crossAxisCount: 2,
               childAspectRatio: 1.0,
-              padding: const EdgeInsets.all(4.0),
-              mainAxisSpacing: 1.0,
-              crossAxisSpacing: 1.0,
+              padding: const EdgeInsets.all(0),
+              mainAxisSpacing: 5.0,
+              crossAxisSpacing: 5.0,
               children: categories.map((ImageCategory category) {
                 return new Card(
                     semanticContainer: true,
@@ -51,7 +51,7 @@ class Body extends StatelessWidget {
                               primary: true,
                               crossAxisCount: 2,
                               childAspectRatio: 1.0,
-                              padding: const EdgeInsets.all(4.0),
+                              padding: const EdgeInsets.all(0),
                               mainAxisSpacing: 1.0,
                               crossAxisSpacing: 1.0,
                               children:
@@ -63,7 +63,6 @@ class Body extends StatelessWidget {
                               }).toList(),
                             ),
                           ),
-                          Divider(),
                           Padding(
                             padding: EdgeInsets.all(5.0),
                             child: Row(
@@ -71,25 +70,27 @@ class Body extends StatelessWidget {
                               children: <Widget>[
                                 Text(
                                   category.title,
-                                  style: TextStyle(
-                                      color: Colors.grey, fontSize: 9),
-                                  textAlign: TextAlign.center,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .caption
+                                      .merge(TextStyle(fontSize: 8)),
                                 ),
                                 Row(
+                                  mainAxisSize: MainAxisSize.max,
                                   children: <Widget>[
                                     Icon(
                                       Icons.share,
-                                      color: Colors.redAccent,
+                                      color: Colors.black54,
                                       size: 9,
                                     ),
                                     Icon(
                                       Icons.delete,
-                                      color: Colors.redAccent,
+                                      color: Colors.black54,
                                       size: 9,
                                     ),
                                     Icon(
                                       Icons.lock,
-                                      color: Colors.redAccent,
+                                      color: Colors.black54,
                                       size: 9,
                                     )
                                   ],

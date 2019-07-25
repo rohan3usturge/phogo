@@ -11,6 +11,8 @@ class ImageCountChart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      width: MediaQuery.of(context).size.width,
+      height: 200,
       child: FutureBuilder(
         future: categories,
         builder: (context, snapshot) {
@@ -19,10 +21,10 @@ class ImageCountChart extends StatelessWidget {
                 animate: true,
                 behaviors: [
                   new DatumLegend(
-                    position: BehaviorPosition.end,
+                    position: BehaviorPosition.start,
                     horizontalFirst: false,
-                    cellPadding: new EdgeInsets.only(right: 4.0, bottom: 4.0),
-                    showMeasures: true,
+                    cellPadding: new EdgeInsets.all(5),
+                    showMeasures: false,
                     legendDefaultMeasure: LegendDefaultMeasure.firstValue,
                     measureFormatter: (num value) {
                       return value == null ? '-' : '${value}';
@@ -36,7 +38,6 @@ class ImageCountChart extends StatelessWidget {
           }
         },
       ),
-      height: 200,
     );
   }
 

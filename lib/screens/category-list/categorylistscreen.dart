@@ -1,6 +1,8 @@
 import 'dart:io';
 
+import 'package:firebase_ml_vision/firebase_ml_vision.dart';
 import 'package:flutter/material.dart';
+import 'package:phogo/models/imagebin.dart';
 import 'package:phogo/models/imagecategory.dart';
 import 'package:phogo/screens/category-list/components/body.dart';
 import 'package:phogo/screens/category-list/components/charts.dart';
@@ -17,10 +19,18 @@ class CategoryListScreen extends StatefulWidget {
 class CategoryList extends State<CategoryListScreen> {
   Future<List<ImageCategory>> imageCategories;
 
+  List<ImageBin> imageBins = new List<ImageBin>();
+
   @override
   void initState() {
     super.initState();
     imageCategories = getImages();
+
+    getImageFiles().listen((imageBin) {
+      // this.setState(() {
+        this.imageBins.add(imageBin);
+      // });
+    });
   }
 
   @override
@@ -33,12 +43,46 @@ class CategoryList extends State<CategoryListScreen> {
           IconButton(icon: Icon(Icons.list), onPressed: _pushSaved),
         ],
       ),
-      body: ListView(
-        shrinkWrap: true,
-        padding: EdgeInsets.all(0),
-        children: <Widget>[
-          ImageCountChart(categories: imageCategories,),
-          Body(imageCategories: imageCategories)
+      body: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Text("Distribution", style: Theme.of(context).textTheme.caption),
+            Divider(),
+            SizedBox(
+              child: ListView(
+                shrinkWrap: true,
+                scrollDirection: Axis.horizontal,
+                children: <Widget>[
+                  ImageCountChart(
+                    categories: imageCategories,
+                  ),
+                  ImageCountChart(
+                    categories: imageCategories,
+                  ),
+                ],
+              ),
+              height: 200,
+            ),
+            Text("Categories", style: Theme.of(context).textTheme.caption),
+            Divider(),
+            Body(imageCategories: imageCategories)
+          ],
+        ),
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        elevation: 10,
+        backgroundColor: Colors.white,
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.grain),
+            title: Text('Scan'),
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.healing),
+            title: Text('Heal'),
+          ),
         ],
       ),
     );
@@ -62,21 +106,35 @@ class CategoryList extends State<CategoryListScreen> {
             appBar: AppBar(
               title: Text('Manage'),
             ),
-            body: FutureBuilder<List<String>>(
-              future: getImageFiles(),
-              builder: (context, snapshot){
-                if ( snapshot.hasData ) {
-                  var data = snapshot.data;
-                  return ListView.builder(
-                    itemCount: snapshot.data.length,
-                    itemBuilder: (context, i){
-                      return ListTile(title: Image.file(File(data[i])),);
-                    }, 
-                  );
-                } else {
-                  return Text("Error Occurred");
-                }
+            body: ListView.builder(
+              itemBuilder: (context, i){
+                return Text("Hi");
               },
+              itemCount: this.imageBins.length,
+              // children: <Widget>[
+              //   StreamBuilder<ImageBin>(
+              //     stream: getImageFiles(),
+              //     builder: (context, snapshot) {
+              //       if (snapshot.connectionState == ConnectionState.waiting) {
+              //         return CircularProgressIndicator();
+              //       }
+
+              //       if (snapshot.connectionState == ConnectionState.done) {
+              //         return Text("Done");
+              //       }
+
+              //       if (snapshot.hasError) {
+              //         return Text("Error Occurred ${snapshot.error}");
+              //       }
+
+              //       if (snapshot.hasData) {
+              //         var data = snapshot.data;
+              //         return Text("${data.url}");
+              //       }
+              //       return Text("UnExpected");
+              //     },
+              //   )
+              // ],
             ),
           );
         },

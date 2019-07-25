@@ -25,6 +25,13 @@ class ImageSearch extends State<ImageSearchScreen> {
       appBar: AppBar(
         title: TextField(
           onChanged: _search,
+          decoration: new InputDecoration.collapsed(
+            hintText: 'Username',
+            hintStyle: Theme.of(context)
+                .textTheme
+                .subhead
+                .merge(TextStyle(color: Colors.white70)),
+          ),
         ),
       ),
       body: Body(
@@ -35,7 +42,7 @@ class ImageSearch extends State<ImageSearchScreen> {
 
   _search(text) {
     setState(() {
-     this.filtered = search(text);
+      this.filtered = search(text);
     });
   }
 }

@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'package:async/async.dart';
 import 'package:firebase_ml_vision/firebase_ml_vision.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:phogo/models/imagebin.dart';
@@ -98,29 +99,29 @@ Future<List<ImageBin>> search(String text) async {
   }).toList();
 }
 
-Future<List<String>> getImageFiles() async {
+Stream<ImageBin> getImageFiles() async* {
   var permissions = await PermissionHandler()
       .requestPermissions([PermissionGroup.storage, PermissionGroup.photos]);
   var externalStorage = await getExternalStorageDirectory();
   var documents = await getApplicationDocumentsDirectory();
-  var files = await FileManager(root: externalStorage).walk().toList();
-  var docs = await FileManager(root: documents).walk().toList();
+  var files = await FileManager(root: externalStorage).walk();
+  var docs = await FileManager(root: documents).walk();
 
-  files.addAll(docs);
-
-  var images = files.where((fileSystemEntity) {
-    return isImage(fileSystemEntity.path);
-  }).map((imgFile) => imgFile.path).toList();
-
+  var merged = StreamGroup.merge([files, docs]);
   final ImageLabeler labeler = FirebaseVision.instance.imageLabeler();
 
-  for (var img in images) {
-    var firebaseVisionImage = FirebaseVisionImage.fromFile(File(img));
-    final List<ImageLabel> labels = await labeler.processImage(firebaseVisionImage);
-    print(labels);
-  }
+  await for (var fileSystemEntity in merged) {
+    try {
+      if (!isImage(fileSystemEntity.path)) {
+        continue;
+      }
+      var firebaseVisionImage = FirebaseVisionImage.fromFile(fileSystemEntity);
+      final List<ImageLabel> labels = await labeler.processImage(firebaseVisionImage);
 
-  return images;
+      yield new ImageBin(
+          labels: labels, url: fileSystemEntity.path, tags: <String>[]);
+    } catch (e) {}
+  }
 }
 
 bool isImage(String path) {
