@@ -17,7 +17,7 @@ class Body extends StatelessWidget {
           if (snapshot.hasData) {
             var categories = snapshot.data;
             return GridView.count(
-              shrinkWrap : true,
+              shrinkWrap: true,
               crossAxisCount: 2,
               childAspectRatio: 1.0,
               padding: const EdgeInsets.all(4.0),
@@ -31,7 +31,7 @@ class Body extends StatelessWidget {
                       borderRadius: BorderRadius.circular(1.0),
                     ),
                     elevation: 2,
-                    margin: EdgeInsets.all(2),
+                    margin: EdgeInsets.all(0),
                     child: InkWell(
                       onTap: () {
                         Navigator.of(context)
@@ -64,17 +64,38 @@ class Body extends StatelessWidget {
                             ),
                           ),
                           Divider(),
-                          Row(
-                            children: <Widget>[
-                              Text(
-                                category.title,
-                                style: TextStyle(
-                                  color: Colors.grey,
-                                  fontFamily: "Roboto",
+                          Padding(
+                            padding: EdgeInsets.all(5.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: <Widget>[
+                                Text(
+                                  category.title,
+                                  style: TextStyle(
+                                      color: Colors.grey, fontSize: 9),
+                                  textAlign: TextAlign.center,
                                 ),
-                                textAlign: TextAlign.center,
-                              )
-                            ],
+                                Row(
+                                  children: <Widget>[
+                                    Icon(
+                                      Icons.share,
+                                      color: Colors.redAccent,
+                                      size: 9,
+                                    ),
+                                    Icon(
+                                      Icons.delete,
+                                      color: Colors.redAccent,
+                                      size: 9,
+                                    ),
+                                    Icon(
+                                      Icons.lock,
+                                      color: Colors.redAccent,
+                                      size: 9,
+                                    )
+                                  ],
+                                ),
+                              ],
+                            ),
                           )
                         ],
                       ),

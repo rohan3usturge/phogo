@@ -27,7 +27,7 @@ class CategoryList extends State<CategoryListScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('PHOGO'),
+        title: Text('KANTABEN'),
         actions: <Widget>[
           IconButton(icon: Icon(Icons.search), onPressed: _openSearch),
           IconButton(icon: Icon(Icons.list), onPressed: _pushSaved),
