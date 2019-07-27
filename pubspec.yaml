@@ -29,6 +29,9 @@ dependencies:
   permission_handler: 3.2.1+1
   flutter_file_manager: 0.2.0
   async: 2.2.0
+  sqflite: 1.1.6+2
+  uuid: 2.0.2
+
 
 dev_dependencies:
   flutter_test:

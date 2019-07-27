@@ -1,6 +1,3 @@
-import 'dart:io';
-
-import 'package:firebase_ml_vision/firebase_ml_vision.dart';
 import 'package:flutter/material.dart';
 import 'package:phogo/models/imagebin.dart';
 import 'package:phogo/models/imagecategory.dart';
