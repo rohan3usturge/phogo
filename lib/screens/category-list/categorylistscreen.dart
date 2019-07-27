@@ -19,7 +19,6 @@ class CategoryListScreen extends StatefulWidget {
 class CategoryList extends State<CategoryListScreen>
     with TickerProviderStateMixin {
   CategoriesBloc _categoriesBloc;
-  bool _isScanInProgress = false;
   AnimationController _animationController;
 
   @override
