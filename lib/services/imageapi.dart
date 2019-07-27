@@ -1,12 +1,8 @@
 import 'dart:async';
-import 'dart:io';
-import 'package:async/async.dart';
 import 'package:firebase_ml_vision/firebase_ml_vision.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:phogo/models/imagebin.dart';
 import 'package:phogo/models/imagecategory.dart';
-import 'package:permission_handler/permission_handler.dart';
-import 'package:flutter_file_manager/flutter_file_manager.dart';
+import 'package:photo_manager/photo_manager.dart';
 
 Future<List<ImageCategory>> getImages() async {
   var categories = new List<ImageCategory>();
@@ -100,27 +96,19 @@ Future<List<ImageBin>> search(String text) async {
 }
 
 Stream<ImageBin> getImageFiles() async* {
-  var permissions = await PermissionHandler()
-      .requestPermissions([PermissionGroup.storage, PermissionGroup.photos]);
-  var externalStorage = await getExternalStorageDirectory();
-  var documents = await getApplicationDocumentsDirectory();
-  var files = await FileManager(root: externalStorage).walk();
-  var docs = await FileManager(root: documents).walk();
-
-  var merged = StreamGroup.merge([files, docs]);
+  var result = await PhotoManager.requestPermission();
+  List<AssetPathEntity> list = await PhotoManager.getImageAsset();
   final ImageLabeler labeler = FirebaseVision.instance.imageLabeler();
 
-  await for (var fileSystemEntity in merged) {
-    try {
-      if (!isImage(fileSystemEntity.path)) {
-        continue;
-      }
-      var firebaseVisionImage = FirebaseVisionImage.fromFile(fileSystemEntity);
-      final List<ImageLabel> labels = await labeler.processImage(firebaseVisionImage);
-
-      yield new ImageBin(
-          labels: labels, url: fileSystemEntity.path, tags: <String>[]);
-    } catch (e) {}
+  for (var item in list) {
+    var assetList = await item.assetList;
+    for (var asset in assetList) {
+      var file = await asset.file;
+      var firebaseVisionImage = FirebaseVisionImage.fromFile(file);
+      final List<ImageLabel> labels =
+          await labeler.processImage(firebaseVisionImage);
+      yield new ImageBin(labels: labels, url: file.path, tags: <String>[]);
+    }
   }
 }
 

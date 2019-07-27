@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:firebase_ml_vision/firebase_ml_vision.dart';
 import 'package:flutter/material.dart';
 import 'package:phogo/models/imagebin.dart';
 import 'package:phogo/models/imagecategory.dart';
@@ -18,19 +17,17 @@ class CategoryListScreen extends StatefulWidget {
 
 class CategoryList extends State<CategoryListScreen> {
   Future<List<ImageCategory>> imageCategories;
-
   List<ImageBin> imageBins = new List<ImageBin>();
-
   @override
   void initState() {
     super.initState();
     imageCategories = getImages();
 
-    getImageFiles().listen((imageBin) {
-      // this.setState(() {
-        this.imageBins.add(imageBin);
-      // });
-    });
+    // getImageFiles().listen((imageBin) {
+    //   // this.setState(() {
+    //     this.imageBins.add(imageBin);
+    //   // });
+    // });
   }
 
   @override
@@ -71,19 +68,9 @@ class CategoryList extends State<CategoryListScreen> {
           ],
         ),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        elevation: 10,
-        backgroundColor: Colors.white,
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.grain),
-            title: Text('Scan'),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.healing),
-            title: Text('Heal'),
-          ),
-        ],
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.scanner),
+        onPressed: () {},
       ),
     );
   }
@@ -106,35 +93,27 @@ class CategoryList extends State<CategoryListScreen> {
             appBar: AppBar(
               title: Text('Manage'),
             ),
-            body: ListView.builder(
-              itemBuilder: (context, i){
-                return Text("Hi");
+            body: StreamBuilder<ImageBin>(
+              stream: getImageFiles(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return CircularProgressIndicator();
+                }
+
+                if (snapshot.connectionState == ConnectionState.done) {
+                  return Text("Done");
+                }
+
+                if (snapshot.hasError) {
+                  return Text("Error Occurred ${snapshot.error}");
+                }
+
+                if (snapshot.hasData) {
+                  var data = snapshot.data;
+                  return Image.file(File("${data.url}"));
+                }
+                return Text("UnExpected");
               },
-              itemCount: this.imageBins.length,
-              // children: <Widget>[
-              //   StreamBuilder<ImageBin>(
-              //     stream: getImageFiles(),
-              //     builder: (context, snapshot) {
-              //       if (snapshot.connectionState == ConnectionState.waiting) {
-              //         return CircularProgressIndicator();
-              //       }
-
-              //       if (snapshot.connectionState == ConnectionState.done) {
-              //         return Text("Done");
-              //       }
-
-              //       if (snapshot.hasError) {
-              //         return Text("Error Occurred ${snapshot.error}");
-              //       }
-
-              //       if (snapshot.hasData) {
-              //         var data = snapshot.data;
-              //         return Text("${data.url}");
-              //       }
-              //       return Text("UnExpected");
-              //     },
-              //   )
-              // ],
             ),
           );
         },
