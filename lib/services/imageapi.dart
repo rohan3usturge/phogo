@@ -104,9 +104,12 @@ Stream<ImageBin> getImageFiles() async* {
         var firebaseVisionImage = FirebaseVisionImage.fromFile(file);
         final List<ImageLabel> labels =
             await labeler.processImage(firebaseVisionImage);
-        var tags = labels.where((ImageLabel label) {
-          return label.confidence > 0.5;
-        }).map((ImageLabel label) => label.text);
+        var tags = labels
+            .where((ImageLabel label) {
+              return label.confidence > 0.5;
+            })
+            .map((ImageLabel label) => label.text)
+            .toList();
         yield new ImageBin(tags: tags, url: file.path);
       }
     }

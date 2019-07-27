@@ -15,10 +15,18 @@ class DBProvider {
     if (_database != null) {
       return _database;
     }
-
+    destroyDb();
     _database = await initDB();
-    this._createCategories();
+    // this._createCategories();
     return _database;
+  }
+
+  destroyDb() async {
+    String documentsDir = await getDatabasesPath();
+    String path = join(documentsDir, 'phogo.db');
+    if (await File(path).exists()) {
+      deleteDatabase(path);
+    }
   }
 
   initDB() async {

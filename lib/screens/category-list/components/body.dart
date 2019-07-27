@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:phogo/models/imagebin.dart';
 import 'package:phogo/models/imagecategory.dart';
@@ -55,8 +57,8 @@ class Body extends StatelessWidget {
                               crossAxisSpacing: 1.0,
                               children:
                                   category.images.take(4).map((ImageBin image) {
-                                return new Image.network(
-                                  image.url,
+                                return new Image.file(
+                                  File(image.url),
                                   fit: BoxFit.fitWidth,
                                 );
                               }).toList(),

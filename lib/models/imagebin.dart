@@ -10,7 +10,7 @@ class ImageBin {
       id: json["id"],
       categoryId: json["categoryId"],
       url: json["url"],
-      tags: json["tags"]);
+      tags: json["tags"].toString().split(","));
 
   Map<String, dynamic> toJson() =>
       {"id": id, "categoryId": categoryId, "url": url, "tags": tags};
