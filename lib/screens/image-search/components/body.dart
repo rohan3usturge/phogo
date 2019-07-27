@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:phogo/models/imagebin.dart';
 
 class Body extends StatelessWidget {
-  Future<List<ImageBin>> filtered;
+  final Future<List<ImageBin>> filtered;
 
   Body({this.filtered});
 

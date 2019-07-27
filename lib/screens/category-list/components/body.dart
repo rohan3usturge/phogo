@@ -4,15 +4,14 @@ import 'package:phogo/models/imagecategory.dart';
 import 'package:phogo/screens/category/categoryscreen.dart';
 
 class Body extends StatelessWidget {
-  final Future<List<ImageCategory>> imageCategories;
-
+  final Stream<List<ImageCategory>> imageCategories;
   const Body({Key key, this.imageCategories}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: FutureBuilder<List<ImageCategory>>(
-        future: imageCategories,
+      child: StreamBuilder<List<ImageCategory>>(
+        stream: imageCategories,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             var categories = snapshot.data;
@@ -69,7 +68,7 @@ class Body extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: <Widget>[
                                 Text(
-                                  category.title,
+                                  category.categoryName,
                                   style: Theme.of(context)
                                       .textTheme
                                       .caption

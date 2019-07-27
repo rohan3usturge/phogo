@@ -3,7 +3,7 @@ import 'package:phogo/models/imagebin.dart';
 import 'package:phogo/models/imagecategory.dart';
 
 class Body extends StatelessWidget {
-  ImageCategory imageCategory;
+  final ImageCategory imageCategory;
 
   Body({this.imageCategory});
 

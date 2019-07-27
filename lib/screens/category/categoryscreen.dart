@@ -2,10 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:phogo/models/imagecategory.dart';
 import 'package:phogo/screens/category/components/body.dart';
 
-
 class CategoryScreen extends StatelessWidget {
-
-  ImageCategory imageCategory;
+  final ImageCategory imageCategory;
 
   CategoryScreen({this.imageCategory});
 
@@ -13,7 +11,7 @@ class CategoryScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(imageCategory.title),
+        title: Text(imageCategory.categoryName),
       ),
       body: Body(imageCategory: imageCategory),
     );

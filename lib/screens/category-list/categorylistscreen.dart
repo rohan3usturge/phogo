@@ -1,11 +1,13 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:phogo/blocs/bloc_provider.dart';
+import 'package:phogo/blocs/category_bloc.dart';
 import 'package:phogo/models/imagebin.dart';
-import 'package:phogo/models/imagecategory.dart';
 import 'package:phogo/screens/category-list/components/body.dart';
 import 'package:phogo/screens/category-list/components/charts.dart';
 import 'package:phogo/screens/image-search/imagesarch.dart';
 import 'package:phogo/services/imageapi.dart';
+import 'package:phogo/services/imagecategoryservice.dart';
 
 class CategoryListScreen extends StatefulWidget {
   @override
@@ -14,19 +16,18 @@ class CategoryListScreen extends StatefulWidget {
   }
 }
 
-class CategoryList extends State<CategoryListScreen> {
-  Future<List<ImageCategory>> imageCategories;
-  List<ImageBin> imageBins = new List<ImageBin>();
+class CategoryList extends State<CategoryListScreen>
+    with TickerProviderStateMixin {
+  CategoriesBloc _categoriesBloc;
+  bool _isScanInProgress = false;
+  AnimationController _animationController;
+
   @override
   void initState() {
     super.initState();
-    imageCategories = getImages();
-
-    // getImageFiles().listen((imageBin) {
-    //   // this.setState(() {
-    //     this.imageBins.add(imageBin);
-    //   // });
-    // });
+    _categoriesBloc = BlocProvider.of<CategoriesBloc>(context);
+    _animationController = AnimationController(
+        duration: const Duration(milliseconds: 500), vsync: this);
   }
 
   @override
@@ -52,10 +53,10 @@ class CategoryList extends State<CategoryListScreen> {
                 scrollDirection: Axis.horizontal,
                 children: <Widget>[
                   ImageCountChart(
-                    categories: imageCategories,
+                    categories: _categoriesBloc.categories,
                   ),
                   ImageCountChart(
-                    categories: imageCategories,
+                    categories: _categoriesBloc.categories,
                   ),
                 ],
               ),
@@ -63,13 +64,22 @@ class CategoryList extends State<CategoryListScreen> {
             ),
             Text("Categories", style: Theme.of(context).textTheme.caption),
             Divider(),
-            Body(imageCategories: imageCategories)
+            Body(imageCategories: _categoriesBloc.categories)
           ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.scanner),
-        onPressed: () {},
+        child: RotationTransition(
+          child: Icon(
+            Icons.refresh,
+          ),
+          turns: Tween(begin: 0.0, end: 1.0).animate(this._animationController),
+        ),
+        onPressed: () {
+          processImageCategories().listen((List<ImageBin> images) {
+            _categoriesBloc.inAddImages.add(images);
+          });
+        },
       ),
     );
   }

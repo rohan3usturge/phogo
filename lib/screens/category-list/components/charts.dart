@@ -4,8 +4,7 @@ import 'package:phogo/models/imagecategory.dart';
 
 @override
 class ImageCountChart extends StatelessWidget {
-  Future<List<ImageCategory>> categories;
-
+  final Stream<List<ImageCategory>> categories;
   ImageCountChart({this.categories});
 
   @override
@@ -13,8 +12,8 @@ class ImageCountChart extends StatelessWidget {
     return Container(
       width: MediaQuery.of(context).size.width,
       height: 200,
-      child: FutureBuilder(
-        future: categories,
+      child: StreamBuilder(
+        stream: categories,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             return PieChart(_createSampleData(snapshot.data),
@@ -27,12 +26,11 @@ class ImageCountChart extends StatelessWidget {
                     showMeasures: false,
                     legendDefaultMeasure: LegendDefaultMeasure.firstValue,
                     measureFormatter: (num value) {
-                      return value == null ? '-' : '${value}';
+                      return value == null ? '-' : '$value';
                     },
                   ),
                 ],
-                defaultRenderer:
-                    new ArcRendererConfig(arcWidth: 30));
+                defaultRenderer: new ArcRendererConfig(arcWidth: 30));
           } else {
             return Text("Error Occurred ${snapshot.error}");
           }
@@ -47,9 +45,10 @@ class ImageCountChart extends StatelessWidget {
     return [
       new Series<ImageCategory, String>(
         id: 'Categories',
-        domainFn: (ImageCategory category, i) => category.title,
+        domainFn: (ImageCategory category, i) => category.categoryName,
         displayName: "Categories",
-        labelAccessorFn: (ImageCategory category, i) => "${category.title}",
+        labelAccessorFn: (ImageCategory category, i) =>
+            "${category.categoryName}",
         measureFn: (ImageCategory category, i) => category.images.length,
         data: categories,
       )
